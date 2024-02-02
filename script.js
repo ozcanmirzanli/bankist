@@ -105,10 +105,7 @@ const calcDisplaySummary = function (acc) {
   const interest = acc.movements
     .filter(mov => mov > 0)
     .map(deposit => (deposit * acc.interestRate) / 100)
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
+
     .filter((int, i, arr) => {
       return int >= 1;
     })
@@ -140,35 +137,36 @@ const updateUI = function (acc) {
 
 // Event handler
 let currentAccount;
+// Create current date and time
+setInterval(function () {
+  const now = new Date();
 
-const now = new Date();
-const day = `${now.getDate()}`.padStart(2, 0);
-const month = `${now.getMonth() + 1}`.padStart(2, 0);
-const year = now.getFullYear();
-const hour = now.getHours();
-const min = now.getMinutes();
-labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
-
+  const day = `${now.getDate()}`.padStart(2, 0);
+  const month = `${now.getMonth() + 1}`.padStart(2, 0);
+  const year = now.getFullYear();
+  const hour = `${now.getHours()}`.padStart(2, 0);
+  const min = `${now.getMinutes()}`.padStart(2, 0);
+  const sec = `${now.getSeconds()}`.padStart(2, 0);
+  labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}:${sec}`;
+}, 1000);
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(
-    // @ts-ignore
     acc => acc.username === inputLoginUsername.value
   );
 
-  // @ts-ignore
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     // Display UI and message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
-    // @ts-ignore
+
     containerApp.style.opacity = 100;
 
     // Clear input fields
-    // @ts-ignore
+
     inputLoginUsername.value = inputLoginPin.value = '';
-    // @ts-ignore
+
     inputLoginPin.blur();
 
     // Update UI
@@ -187,13 +185,12 @@ logout.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  // @ts-ignore
+
   const amount = Number(inputTransferAmount.value);
   const receiverAcc = accounts.find(
-    // @ts-ignore
     acc => acc.username === inputTransferTo.value
   );
-  // @ts-ignore
+
   inputTransferAmount.value = inputTransferTo.value = '';
 
   if (
@@ -214,7 +211,6 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  // @ts-ignore
   const amount = Number(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
@@ -224,7 +220,7 @@ btnLoan.addEventListener('click', function (e) {
     //UpdateUI
     updateUI(currentAccount);
   }
-  // @ts-ignore
+
   inputLoanAmount.value = '';
 });
 
@@ -232,9 +228,7 @@ btnClose.addEventListener('click', function (e) {
   e.preventDefault();
 
   if (
-    // @ts-ignore
     inputCloseUsername.value === currentAccount.username &&
-    // @ts-ignore
     Number(inputClosePin.value) === currentAccount?.pin
   ) {
     const index = accounts.findIndex(
@@ -245,10 +239,10 @@ btnClose.addEventListener('click', function (e) {
     accounts.splice(index, 1);
 
     // Hide UI
-    // @ts-ignore
+
     containerApp.style.opacity = 0;
   }
-  // @ts-ignore
+
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
